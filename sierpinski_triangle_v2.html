@@ -10,6 +10,8 @@ MODIFIED:	Jason Allen Doucette
 	<head>
 		<title>Sierpinski Triangle</title>
 		<script>
+			"use strict";
+
 			// graphics
 			var hCanvas  = undefined;
 			var hContext = undefined;
@@ -22,7 +24,7 @@ MODIFIED:	Jason Allen Doucette
 			var nTimerId = 0;
 			
 			// points
-			var nPoints = 3;  // Sierpinski Triangle
+			//var nPoints = 3;  // Sierpinski Triangle
 			var nPoints = 5;
 			var px = new Array(nPoints);
 			var py = new Array(nPoints);
@@ -38,11 +40,11 @@ MODIFIED:	Jason Allen Doucette
 				aTexels[i + 3] = a;
 			}
 
-			function init()
+			function init_points()
 			{
 				for( var i = 0; i < nPoints; i++ )
 				{
-					angle = i * Math.PI * 2.0 / nPoints;
+					var angle = i * Math.PI * 2.0 / nPoints;
 					px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
 					py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
 					plot( Math.floor(px[i]), Math.floor(py[i]), 0,0,0,255 );
@@ -64,7 +66,7 @@ MODIFIED:	Jason Allen Doucette
 				hContext.putImageData( tImage, 0, 0 );
 			}
 
-			function main()
+			function main_function()
 			{
 				hCanvas  = document.getElementById("MyCanvas");
 				hContext = hCanvas.getContext("2d");
@@ -73,12 +75,15 @@ MODIFIED:	Jason Allen Doucette
 				tImage   = hContext.getImageData(0, 0, nCanvasW, nCanvasH);
 				aTexels  = tImage.data; 
 
-				init();
+				init_points();
 				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
 			}
+			
+			window.onload = main_function;
 		</script>
 	</head>
-	<body onload="main()">
+	<!-- <body onload="main_function()"> -->
+	<body onload="main_function()">
 		<canvas id="MyCanvas" width="1536" height="1536"></canvas>
 	</body>
 </html>
