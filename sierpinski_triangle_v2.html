@@ -7,9 +7,6 @@ MODIFIED:	Jason Allen Doucette
 -->
 <html>
 	<head>
-		<body onload="main()">
-			<canvas id="MyCanvas" width="1536" height="1536"></canvas>
-		</body>
 		<script>
 			// graphics
 			var hCanvas  = undefined;
@@ -77,5 +74,8 @@ MODIFIED:	Jason Allen Doucette
 				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
 			}
 		</script>
+		<body onload="main()">
+			<canvas id="MyCanvas" width="1536" height="1536"></canvas>
+		</body>
 	</head>
 </html>
