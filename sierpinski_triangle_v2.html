@@ -8,13 +8,19 @@ MODIFIED:	Jason Allen Doucette
 -->
 <html>
 	<head>
-		<title>Sierpinski Triangle</title>
+		<title>Sierpinski Triangle - JavaScript Animation</title>
 	</head>
 	<!-- 
-		DOESN'T WORK WITH htmlpreview.github.io 
-		Note: requires function is already defined (move SCRIPT into HEAD).
+		NOTE: the following does NOT work htmlpreview.github.io:
+			<body onload="main_function()">
+		Further note: If trying to use the above, main_function() has to exist
+		before this line, so you'll have to move the SCRIPT into HEAD (it can
+		exist in HEAD or BODY for JavaScript validation).
+		NOTE: the following does NOT work htmlpreview.github.io:
+			window.onload = main_function;
+			(being included in the JavaScript code)
 	-->
-	<!-- <body onload="main_function()"> -->
+	<!--  -->
 	<body>
 		<canvas id="MyCanvas" width="1536" height="1536"></canvas>
 		<script>
@@ -87,10 +93,6 @@ MODIFIED:	Jason Allen Doucette
 				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
 			}
 			
-			// DOESN'T WORK WITH htmlpreview.github.io
-			// window.onload = main_function;
-			
-			// TRYING 
 			// anonymous function that is defined and run when defined
 			(function () {
 				main_function();
