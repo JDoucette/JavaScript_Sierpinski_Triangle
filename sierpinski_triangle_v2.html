@@ -11,7 +11,7 @@ MODIFIED:	Jason Allen Doucette
 		<title>Sierpinski Triangle - JavaScript Animation</title>
 	</head>
 	<body>
-		<canvas id="MyCanvas" width="1536" height="1536"></canvas>
+		<canvas id="MyCanvas" width="1024" height="1024"></canvas>
 		<script>
 			"use strict";
 
@@ -28,13 +28,20 @@ MODIFIED:	Jason Allen Doucette
 			
 			// points
 			//var nPoints = 3;  // Sierpinski Triangle
-			var nPoints = 5;
+			var nPoints = 3;
 			var px = new Array(nPoints);
 			var py = new Array(nPoints);
 			var cx = undefined;
 			var cy = undefined;
+			
+			// point motion
+			//var divisor = 2;  // Sierpinski Triangle
+			var divisor = 2;
+			var weightSour = divisor - 1;
+			var weightDest =           1;
+			var invDivisor = 1 / divisor;
 
-			function plot_pixel( x, y, r, g, b, a )
+			function plot_pixel(x, y, r, g, b, a)
 			{
 				var i = (y * nCanvasW + x) * 4; // 32-bit RGBA
 				aTexels[i + 0] = r;
@@ -45,12 +52,12 @@ MODIFIED:	Jason Allen Doucette
 
 			function init_points()
 			{
-				for( var i = 0; i < nPoints; i++ )
+				for (var i = 0; i < nPoints; i++)
 				{
 					var angle = i * Math.PI * 2.0 / nPoints;
 					px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
 					py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
-					plot_pixel( Math.floor(px[i]), Math.floor(py[i]), 0, 0, 0, 255 );
+					plot_pixel(Math.floor(px[i]), Math.floor(py[i]), 0, 0, 0, 255);
 				}
 				cx = px[0];
 				cy = py[0];
@@ -58,15 +65,17 @@ MODIFIED:	Jason Allen Doucette
 
 			function update()
 			{
-				for (var j = 0; j < 10000; j++ )
+				for (var j = 0; j < 10000; j++)
 				{
 					var i = Math.floor(nPoints * Math.random());
-					cx = (cx + px[i]) / 2;
-					cy = (cy + py[i]) / 2;
-					//plot_pixel( Math.floor(nCanvasW * Math.random()), Math.floor(nCanvasH * Math.random()), 255,0,0,255 );
-					plot_pixel( Math.floor(cx), Math.floor(cy), 0, 0, 0, 255 );
+					
+					// move half-way there
+					cx = (cx * weightSour + px[i] * weightDest) * invDivisor;
+					cy = (cy * weightSour + py[i] * weightDest) * invDivisor;
+					//plot_pixel(Math.floor(nCanvasW * Math.random()), Math.floor(nCanvasH * Math.random()), 255,0,0,255);
+					plot_pixel(Math.floor(cx), Math.floor(cy), 0, 0, 0, 255);
 				}
-				hContext.putImageData( tImage, 0, 0 );
+				hContext.putImageData(tImage, 0, 0);
 			}
 
 			function main_function()
@@ -81,7 +90,7 @@ MODIFIED:	Jason Allen Doucette
 				init_points();
 				
 				// game loop
-				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
+				nTimerId = setInterval(function() { update(); }, 1000 / 60);
 			}
 
 			// launch main
