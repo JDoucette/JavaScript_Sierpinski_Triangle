@@ -10,17 +10,6 @@ MODIFIED:	Jason Allen Doucette
 	<head>
 		<title>Sierpinski Triangle - JavaScript Animation</title>
 	</head>
-	<!-- 
-		NOTE: the following does NOT work htmlpreview.github.io:
-			<body onload="main_function()">
-		Further note: If trying to use the above, main_function() has to exist
-		before this line, so you'll have to move the SCRIPT into HEAD (it can
-		exist in HEAD or BODY for JavaScript validation).
-		NOTE: the following does NOT work htmlpreview.github.io:
-			window.onload = main_function;
-			(being included in the JavaScript code)
-	-->
-	<!--  -->
 	<body>
 		<canvas id="MyCanvas" width="1536" height="1536"></canvas>
 		<script>
@@ -45,7 +34,7 @@ MODIFIED:	Jason Allen Doucette
 			var cx = undefined;
 			var cy = undefined;
 
-			function plot( x, y, r, g, b, a )
+			function plot_pixel( x, y, r, g, b, a )
 			{
 				var i = (y * nCanvasW + x) * 4; // 32-bit RGBA
 				aTexels[i + 0] = r;
@@ -61,7 +50,7 @@ MODIFIED:	Jason Allen Doucette
 					var angle = i * Math.PI * 2.0 / nPoints;
 					px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
 					py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
-					plot( Math.floor(px[i]), Math.floor(py[i]), 0,0,0,255 );
+					plot_pixel( Math.floor(px[i]), Math.floor(py[i]), 0, 0, 0, 255 );
 				}
 				cx = px[0];
 				cy = py[0];
@@ -74,8 +63,8 @@ MODIFIED:	Jason Allen Doucette
 					var i = Math.floor(nPoints * Math.random());
 					cx = (cx + px[i]) / 2;
 					cy = (cy + py[i]) / 2;
-					//plot( Math.floor(nCanvasW * Math.random()), Math.floor(nCanvasH * Math.random()), 255,0,0,255 );
-					plot( Math.floor(cx), Math.floor(cy), 0,0,0,255 );
+					//plot_pixel( Math.floor(nCanvasW * Math.random()), Math.floor(nCanvasH * Math.random()), 255,0,0,255 );
+					plot_pixel( Math.floor(cx), Math.floor(cy), 0, 0, 0, 255 );
 				}
 				hContext.putImageData( tImage, 0, 0 );
 			}
@@ -90,14 +79,30 @@ MODIFIED:	Jason Allen Doucette
 				aTexels  = tImage.data; 
 
 				init_points();
+				
+				// game loop
 				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
 			}
+
+			// launch main
 			
 			// anonymous function that is defined and run when defined
 			// SOURCE: https://stackoverflow.com/a/50910561/135218
+			// this works when inside https://htmlpreview.github.io/  :)
 			(function () {
 				main_function();
 			})();
+			
+			// NOTE: the following do NOT work inside https://htmlpreview.github.io/  :)
+			//	1.
+			//		<body onload="main_function()">
+			//		Further note: If trying to use the above, main_function() has to exist
+			//		before this line, so you'll have to move the SCRIPT into HEAD (it can
+			//		exist in HEAD or BODY for JavaScript validation).
+			//	2.
+			//		window.onload = main_function;
+			//		(being included in the JavaScript code)
+			
 		</script>
 	</body>
 </html>
