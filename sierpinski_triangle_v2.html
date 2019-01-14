@@ -6,20 +6,20 @@ MODIFIED:	Jason Allen Doucette
 			Jan 12, 2019, 1:58 am
 -->
 <html>
-    <body onload="main()">
-        <canvas id="MyCanvas" width="1536" height="1536"></canvas>
-    </body>
-    <head>
-        <script>
+	<head>
+		<body onload="main()">
+			<canvas id="MyCanvas" width="1536" height="1536"></canvas>
+		</body>
+		<script>
 			// graphics
-            var hCanvas  = undefined;
-            var hContext = undefined;
-            var nCanvasW = 0;
-            var nCanvasH = 0;
-            var tImage   = undefined;
-            var aTexels  = undefined;
+			var hCanvas  = undefined;
+			var hContext = undefined;
+			var nCanvasW = 0;
+			var nCanvasH = 0;
+			var tImage   = undefined;
+			var aTexels  = undefined;
 
-            var nTimerId = 0;
+			var nTimerId = 0;
 			
 			// points
 			var nPoints = 3;  // Sierpinski Triangle
@@ -29,30 +29,30 @@ MODIFIED:	Jason Allen Doucette
 			var cx = undefined;
 			var cy = undefined;
 
-            function plot( x, y, r, g, b, a )
-            {
-                var i = (y * nCanvasW + x) * 4; // 32-bit RGBA
-                aTexels[i + 0] = r;
-                aTexels[i + 1] = g;
-                aTexels[i + 2] = b;
-                aTexels[i + 3] = a;
-            }
+			function plot( x, y, r, g, b, a )
+			{
+				var i = (y * nCanvasW + x) * 4; // 32-bit RGBA
+				aTexels[i + 0] = r;
+				aTexels[i + 1] = g;
+				aTexels[i + 2] = b;
+				aTexels[i + 3] = a;
+			}
 
-            function init()
-            {
-                for( var i = 0; i < nPoints; i++ )
-                {
+			function init()
+			{
+				for( var i = 0; i < nPoints; i++ )
+				{
 					angle = i * Math.PI * 2.0 / nPoints;
-                    px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
-                    py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
+					px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
+					py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
 					plot( Math.floor(px[i]), Math.floor(py[i]), 0,0,0,255 );
-                }
+				}
 				cx = px[0];
 				cy = py[0];
-            }
+			}
 
-            function update()
-            {
+			function update()
+			{
 				for (var j = 0; j < 10000; j++ )
 				{
 					var i = Math.floor(nPoints * Math.random());
@@ -62,20 +62,20 @@ MODIFIED:	Jason Allen Doucette
 					plot( Math.floor(cx), Math.floor(cy), 0,0,0,255 );
 				}
 				hContext.putImageData( tImage, 0, 0 );
-            }
+			}
 
-            function main()
-            {
-                hCanvas  = document.getElementById("MyCanvas");
-                hContext = hCanvas.getContext("2d");
-                nCanvasW = hCanvas.width;
-                nCanvasH = hCanvas.height;
-                tImage   = hContext.getImageData(0, 0, nCanvasW, nCanvasH);
-                aTexels  = tImage.data; 
+			function main()
+			{
+				hCanvas  = document.getElementById("MyCanvas");
+				hContext = hCanvas.getContext("2d");
+				nCanvasW = hCanvas.width;
+				nCanvasH = hCanvas.height;
+				tImage   = hContext.getImageData(0, 0, nCanvasW, nCanvasH);
+				aTexels  = tImage.data; 
 
-                init();
-                nTimerId = setInterval( function() { update(); }, 1000 / 60 );
-            }
-        </script>
+				init();
+				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
+			}
+		</script>
 	</head>
 </html>
