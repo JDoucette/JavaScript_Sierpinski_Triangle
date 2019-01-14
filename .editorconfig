@@ -1,0 +1,10 @@
+# SOURCE
+# https://stackoverflow.com/a/33831598/135218
+
+# When you have a .editorconfig in your repository 
+# it will respect it when viewing code on GitHub.
+
+[*]
+indent_style = tab
+indent_size = 4
+
