@@ -9,6 +9,14 @@ MODIFIED:	Jason Allen Doucette
 <html>
 	<head>
 		<title>Sierpinski Triangle</title>
+	</head>
+	<!-- 
+		DOESN'T WORK WITH htmlpreview.github.io 
+		Note: requires function is already defined (move SCRIPT into HEAD).
+	-->
+	<!-- <body onload="main_function()"> -->
+	<body>
+		<canvas id="MyCanvas" width="1536" height="1536"></canvas>
 		<script>
 			"use strict";
 
@@ -79,18 +87,14 @@ MODIFIED:	Jason Allen Doucette
 				nTimerId = setInterval( function() { update(); }, 1000 / 60 );
 			}
 			
-			// TRYING WITH htmlpreview.github.io
-			window.onload = main_function;
+			// DOESN'T WORK WITH htmlpreview.github.io
+			// window.onload = main_function;
 			
-			// WILL TRY NEXT:
-			//(function () {
-			//	alert("I am here");
-			//})();
+			// TRYING 
+			// anonymous function that is defined and run when defined
+			(function () {
+				main_function();
+			})();
 		</script>
-	</head>
-	<!-- DOESN'T WORK WITH htmlpreview.github.io -->
-	<!-- <body onload="main_function()"> -->
-	<body>
-		<canvas id="MyCanvas" width="1536" height="1536"></canvas>
 	</body>
 </html>
