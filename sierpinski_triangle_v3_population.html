@@ -34,7 +34,7 @@ MODIFIED:	Jason Allen Doucette
 			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 			// 3 = Sierpinski Triangle
 			// 13 = the first one that is sort of smooth
-			var nPoints = 13;  
+			var nPoints = 3;  
 			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 			var px = new Array(nPoints);
 			var py = new Array(nPoints);
@@ -43,11 +43,11 @@ MODIFIED:	Jason Allen Doucette
 			
 			// point motion
 			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-			var divisor = 2;  // 2 = go 1/2 of the way = Sierpinski Triangle
+			var perDistance = 1.0 / 2.0;  // 1/2 = go 1/2 of the way = Sierpinski Triangle
 			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-			var weightSour = divisor - 1;
-			var weightDest =           1;
-			var invDivisor = 1 / divisor;
+			var divisor = 1.0 / perDistance;
+			var weightSour = divisor - 1.0;
+			var weightDest =           1.0;
 
 			// determine index into linear frame buffer from (x,y)
 			function plot_pixel_xy(x, y, r, g, b)
@@ -80,9 +80,10 @@ MODIFIED:	Jason Allen Doucette
 
 			function init_fractal_definition_points()
 			{
+				var randAngle = Math.random() * Math.PI * 2.0;  // just to randomly rotate it
 				for (var i = 0; i < nPoints; i++)
 				{
-					var angle = i * Math.PI * 2.0 / nPoints;
+					var angle = randAngle + i * Math.PI * 2.0 / nPoints;
 					px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
 					py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
 				}
@@ -98,8 +99,8 @@ MODIFIED:	Jason Allen Doucette
 					var idxPt = Math.floor(nPoints * Math.random());
 					
 					// move half-way there
-					cx = (cx * weightSour + px[idxPt] * weightDest) * invDivisor;
-					cy = (cy * weightSour + py[idxPt] * weightDest) * invDivisor;
+					cx = (cx * weightSour + px[idxPt] * weightDest) * perDistance;
+					cy = (cy * weightSour + py[idxPt] * weightDest) * perDistance;
 					plot_population_pixel(Math.floor(cx), Math.floor(cy));
 				}
 				
@@ -112,6 +113,17 @@ MODIFIED:	Jason Allen Doucette
 					plot_pixel_index(i, darkness, darkness, darkness);  // index, RGB
 				}
 
+				// draw the canvas corners (triangles)
+				var thickness = 7;
+				for (var tx = 0; tx < thickness; tx++) {
+					for (var ty = 0; ty < thickness - tx; ty++) {
+						plot_pixel_xy(               tx,                ty, 0, 0, 0);
+						plot_pixel_xy(nCanvasW - 1 - tx,                ty, 0, 0, 0);
+						plot_pixel_xy(               tx, nCanvasH - 1 - ty, 0, 0, 0);
+						plot_pixel_xy(nCanvasW - 1 - tx, nCanvasH - 1 - ty, 0, 0, 0);
+					}
+				}
+				
 				// now "draw" the image
 				hContext.putImageData(tImage, 0, 0);
 			}
