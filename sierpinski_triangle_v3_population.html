@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<!--
+ORIGINAL:	Michael Pohoreski <michael.pohoreski@gmail.com>
+			Jan 9, 2015, 11:26 PM
+			Email subject: Re: What's your favorite “programmer” cartoon?
+MODIFIED:	Jason Allen Doucette
+			Jan 12, 2019, 1:58 am
+-->
+<html>
+	<head>
+		<title>Sierpinski Triangle - JavaScript Animation</title>
+	</head>
+	<body>
+		<canvas id="MyCanvas" width="1024" height="1024"></canvas>
+		<script>
+			"use strict";
+
+			// graphics
+			var hCanvas  = undefined;
+			var hContext = undefined;
+			var nCanvasW = 0;
+			var nCanvasH = 0;
+			var tImage   = undefined;
+			var aTexels  = undefined;  // 1D array representing 2D data
+
+			// game loop timer
+			var nTimerId = 0;
+			
+			// population count
+			var aPopulation = [];  // 1D array representing 2D data
+			var maxPop = 1;  // technically should be 0, but this avoids divide by zero.
+			
+			// points
+			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+			var nPoints = 32;  // 3 = Sierpinski Triangle
+			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+			var px = new Array(nPoints);
+			var py = new Array(nPoints);
+			var cx = undefined;
+			var cy = undefined;
+			
+			// point motion
+			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+			var divisor = 2;  // 2 = go 1/2 of the way = Sierpinski Triangle
+			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+			var weightSour = divisor - 1;
+			var weightDest =           1;
+			var invDivisor = 1 / divisor;
+
+			// determine index into linear frame buffer from (x,y)
+			function plot_pixel_xy(x, y, r, g, b)
+			{
+				var i = (y * nCanvasW + x) * 4; // 32-bit RGBA
+				aTexels[i + 0] = r;
+				aTexels[i + 1] = g;
+				aTexels[i + 2] = b;
+				aTexels[i + 3] = 255;
+			}
+
+			// index = 0..n-1, linear frame buffer
+			function plot_pixel_index(index, r, g, b)
+			{
+				var i = index * 4; // 32-bit RGBA
+				aTexels[i + 0] = r;
+				aTexels[i + 1] = g;
+				aTexels[i + 2] = b;
+				aTexels[i + 3] = 255;
+			}
+
+			function plot_population_pixel(x, y)
+			{
+				var i = y * nCanvasW + x;
+				aPopulation[i]++;  // integer count
+				if (aPopulation[i] > maxPop) {
+					maxPop = aPopulation[i];
+				}
+			}
+
+			function init_fractal_definition_points()
+			{
+				for (var i = 0; i < nPoints; i++)
+				{
+					var angle = i * Math.PI * 2.0 / nPoints;
+					px[i] = nCanvasW / 2.0 + Math.cos(angle) * nCanvasW / 2.0;
+					py[i] = nCanvasH / 2.0 + Math.sin(angle) * nCanvasH / 2.0;
+				}
+				cx = px[0];
+				cy = py[0];
+			}
+
+			function update_draw_frame()
+			{
+				// plot "population" pixels
+				for (var plot = 0; plot < 100000; plot++)
+				{
+					var idxPt = Math.floor(nPoints * Math.random());
+					
+					// move half-way there
+					cx = (cx * weightSour + px[idxPt] * weightDest) * invDivisor;
+					cy = (cy * weightSour + py[idxPt] * weightDest) * invDivisor;
+					plot_population_pixel(Math.floor(cx), Math.floor(cy));
+				}
+				
+				// now plot the actual pixels
+				var invMaxPop = 255.0 / maxPop;
+				for (var i = 0; i < nCanvasW * nCanvasH; i++) {
+					var power = aPopulation[i] * invMaxPop;
+					var darkness = Math.floor(255 - power);
+					//darkness = Math.floor(Math.random() * 128);
+					plot_pixel_index(i, darkness, darkness, darkness);  // index, RGB
+				}
+
+				// now "draw" the image
+				hContext.putImageData(tImage, 0, 0);
+			}
+			
+			function main_function()
+			{
+				hCanvas  = document.getElementById("MyCanvas");
+				hContext = hCanvas.getContext("2d");
+				nCanvasW = hCanvas.width;
+				nCanvasH = hCanvas.height;
+				tImage   = hContext.getImageData(0, 0, nCanvasW, nCanvasH);
+				aTexels  = tImage.data; 
+				for (var i = 0; i < nCanvasW * nCanvasH; i++) {
+					aPopulation[i] = 0;
+				}
+
+				init_fractal_definition_points();
+				
+				// game loop
+				// update & draw frame
+				nTimerId = setInterval(function() { update_draw_frame(); }, 1000 / 60);
+			}
+
+			// launch main
+			
+			// anonymous function that is defined and run when defined
+			// SOURCE: https://stackoverflow.com/a/50910561/135218
+			// this works when inside https://htmlpreview.github.io/  :)
+			(function () {
+				main_function();
+			})();
+			
+			// NOTE: the following do NOT work inside https://htmlpreview.github.io/  :)
+			//	1.
+			//		<body onload="main_function()">
+			//		Further note: If trying to use the above, main_function() has to exist
+			//		before this line, so you'll have to move the SCRIPT into HEAD (it can
+			//		exist in HEAD or BODY for JavaScript validation).
+			//	2.
+			//		window.onload = main_function;
+			//		(being included in the JavaScript code)
+			
+		</script>
+	</body>
+</html>
