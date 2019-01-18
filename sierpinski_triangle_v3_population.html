@@ -34,7 +34,7 @@ MODIFIED:	Jason Allen Doucette
 			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 			// 3 = Sierpinski Triangle
 			// 13 = the first one that is sort of smooth
-			var nPoints = 3;  
+			var nPoints = 13; 
 			// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 			var px = new Array(nPoints);
 			var py = new Array(nPoints);
@@ -93,34 +93,83 @@ MODIFIED:	Jason Allen Doucette
 
 			function update_draw_frame()
 			{
-				// plot "population" pixels
+				// update
 				for (var plot = 0; plot < 100000; plot++)
 				{
 					var idxPt = Math.floor(nPoints * Math.random());
 					
-					// move half-way there
+					// move half-way (or some other measure) there
 					cx = (cx * weightSour + px[idxPt] * weightDest) * perDistance;
 					cy = (cy * weightSour + py[idxPt] * weightDest) * perDistance;
 					plot_population_pixel(Math.floor(cx), Math.floor(cy));
 				}
 				
-				// now plot the actual pixels
+				// draw
+				// compute density, plot the actual pixels
+				
+				// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+				// DRAW COLORING STYLE #1
+				// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+				// WHITE --> BLACK
+				// 0.0       1.0
+				/*
 				var invMaxPop = 255.0 / maxPop;
 				for (var i = 0; i < nCanvasW * nCanvasH; i++) {
 					var power = aPopulation[i] * invMaxPop;
 					var darkness = Math.floor(255 - power);
-					//darkness = Math.floor(Math.random() * 128);
-					plot_pixel_index(i, darkness, darkness, darkness);  // index, RGB
+					var r = darkness;
+					var g = darkness;
+					var b = darkness;
+					plot_pixel_index(i, r, g, b);
 				}
+				*/
+				// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+				// DRAW COLORING STYLE #2
+				// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+				// BLACK -> BLUE --> GREEN --> YELLOW --> RED --> WHITE
+				// 0.0      1.0      2.0       3.0        4.0     5.0
+				var invMaxPop = 5.0 / maxPop;
+				for (var i = 0; i < nCanvasW * nCanvasH; i++) {
+					var power = aPopulation[i] * invMaxPop;
+					var r;
+					var g;
+					var b;
+					if (power < 1.0) {
+						r = 0;
+						g = 0;
+						b = Math.floor( power        * 255.999);;
+					} else if (power < 2.0) {
+						r = 0;
+						g = Math.floor((power - 1.0) * 255.999);
+						b = 255 - g;
+					} else if (power < 3.0) {
+						r = Math.floor((power - 2.0) * 255.999);
+						g = 255;
+						b = 0;
+					} else if (power < 4.0) {
+						r = 255;
+						g = 255 - Math.floor((power - 3.0) * 255.999);
+						b = 0;
+					} else {
+						r = 255;
+						g = Math.floor((power - 4.0) * 255.999);
+						b = g;
+					}
+					plot_pixel_index(i, r, g, b);
+				}
+				// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+				// END DRAWING
+				// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 				// draw the canvas corners (triangles)
 				var thickness = 7;
+				var cRGB = 128;  // visible both on black and white backgrounds
 				for (var tx = 0; tx < thickness; tx++) {
 					for (var ty = 0; ty < thickness - tx; ty++) {
-						plot_pixel_xy(               tx,                ty, 0, 0, 0);
-						plot_pixel_xy(nCanvasW - 1 - tx,                ty, 0, 0, 0);
-						plot_pixel_xy(               tx, nCanvasH - 1 - ty, 0, 0, 0);
-						plot_pixel_xy(nCanvasW - 1 - tx, nCanvasH - 1 - ty, 0, 0, 0);
+						plot_pixel_xy(               tx,                ty, cRGB, cRGB, cRGB);
+						plot_pixel_xy(nCanvasW - 1 - tx,                ty, cRGB, cRGB, cRGB);
+						plot_pixel_xy(               tx, nCanvasH - 1 - ty, cRGB, cRGB, cRGB);
+						plot_pixel_xy(nCanvasW - 1 - tx, nCanvasH - 1 - ty, cRGB, cRGB, cRGB);
 					}
 				}
 				
