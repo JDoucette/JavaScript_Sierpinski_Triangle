@@ -1,16 +1,19 @@
 # JavaScript_Sierpinski_Triangle
 
-# Previews
+# HTML Previews
 
-* [HTML Preview](https://htmlpreview.github.io/?https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v1_no_gameloop.html
+## No Game Loop + Normal "In Set" Render
+* https://htmlpreview.github.io/?https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v1_no_gameloop.html
 
-* [HTML Preview](https://htmlpreview.github.io/?https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v2_game_loop.html
+## Game Loop + Normal "In Set" Render
+* https://htmlpreview.github.io/?https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v2_game_loop.html
 
-* [HTML Preview](https://htmlpreview.github.io/?https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v3_population.html
+## Game Loop + Density Population
+* https://htmlpreview.github.io/?https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v3_population.html
 
 # TODO
 
-* From Michael Pohoreski:
+## From Michael Pohoreski:
 
 Since the anonymous lambda function works you might be able to remove it entirely and just directly call main_function()
 https://github.com/JDoucette/JavaScript_Sierpinski_Triangle/blob/master/sierpinski_triangle_v2.html#L93
@@ -40,7 +43,7 @@ Unfortunately the anonymous lambda creates a problem for us:  We are trying to a
     <body onload="if( typeof window['main'] === 'function' ) main()">
 	
 	
-* Perhaps for other JavaScript effects, and not this one:
+## Perhaps for other JavaScript effects, and not this one:
 
 Scale canvas up as nearest neighbour for low resolution, full screen effects:
 
